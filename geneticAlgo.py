@@ -17,6 +17,7 @@ def select_mating_pool(population, fitness, num_of_parents_mating):
     for n in range(num_of_parents_mating):
         max_index = np.where(fitness == np.max(fitness))
         max_index = max_index[0][0]
+        # print("max_index",max_index)
         parents[n] = population[max_index]
         f=open("neuralNet.txt", "w")
         for i in range(population.shape[1]):
@@ -26,25 +27,30 @@ def select_mating_pool(population, fitness, num_of_parents_mating):
         fitness[max_index] = -99999
     return parents    
 
-def crossover(parents, offspring_size):
-    new_population = np.empty(offspring_size)
-    for k in range(offspring_size[0]):
+def crossover(parents, offspring_size, num_weights):
+    new_population = np.zeros([offspring_size, num_weights])
+    # print("offspring_size", offspring_size)
+    # print("num_weights", num_weights)
+    for k in range(offspring_size):
+        # print("offspring_size",offspring_size)
         while True:
             parent1 = np.random.randint(0, parents.shape[0] - 1)
             parent2 = np.random.randint(0, parents.shape[0] - 1)
 
             if parent1 != parent2:
-                for j in range(offspring_size[1]):
+                for j in range(num_weights):
                     if np.random.uniform(0,1) > 0.5:
-                        new_population[k, j] = parents[parent1, j]
+                        new_population[k][j] = parents[parent1][j]
+                        # print("new_population",new_population[k,j])
+                        # print("parents", parents[parent1, j])
                     else:
-                        new_population[k, j] = parents[parent2, j]
+                        new_population[k][j] = parents[parent2][j]
                 break
     return new_population
 
 def mutation(offspring_crossover):
     for k in range(offspring_crossover.shape[0]):
-        for _ in range(25):
+        for _ in range(100):
             j = np.random.randint(0,offspring_crossover.shape[1]-1)
             i = np.random.choice(np.arange(-1,1,0.001), size=(1),replace=False)
             offspring_crossover[k, j] += i

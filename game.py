@@ -36,24 +36,30 @@ def collisionWithApple(snake ,applePos):
     return 0 
 
 
-def collisionWithWall(snake,directionVec = None):
-    if directionVec is None:
-        directionVec = snake[0] - snake[1]
-    a = snake[0] + directionVec
-    if a[0] > 490 or a[0] < 0 or a[1] > 490 or a[1] < 0:
+def collisionWithWall(snake,nextHeadPos = None):
+    if nextHeadPos is None:
+        a = snake[0]
+    else:    
+        a = nextHeadPos
+    # print("a",a)
+    if a[0] >= 490 or a[0] <= 0 or a[1] >= 490 or a[1] <= 0:
         return 1
     return 0    
 
-def collisionWithSelf(snake):
+def collisionWithSelf(snake, nextHeadPos = None):
+    if nextHeadPos is None:
+        a = snake[0]
+    else: 
+        a = nextHeadPos
     for x in range(1,len(snake)-1):
-        if list(snake[0]) == list(snake[x]):
+        if list(a) == list(snake[x]):
             return 1
     return 0     
 
 def isBlocked(snakePos, directionVec):
     nextHeadPos = snakePos[0] + directionVec
 
-    if collisionWithSelf(snakePos) == 1 or collisionWithWall(snakePos,directionVec) == 1:
+    if collisionWithSelf(snakePos, nextHeadPos) == 1 or collisionWithWall(snakePos, nextHeadPos) == 1:
         return 1
     else:
         return 0    
@@ -74,8 +80,16 @@ def directionVectors(snakePos, applePos):
     snakeDirectionVector = snakePos[0] - snakePos[1]
     snakeAppleDirectionVec = np.array(applePos) - np.array(snakePos[0])
     
+    # print("snakePos", snakePos[0])
+    # print("applePos", applePos)
+    # print("snakeDirectionVector", snakeDirectionVector)
+    # print("snakeAppleDirectionVec",snakeAppleDirectionVec)
+
     normSnakeDirectionVector = np.linalg.norm(snakeDirectionVector)
     normSnakeAppleVec = np.linalg.norm(snakeAppleDirectionVec)
+
+    # print("normSnakeDirectionVector", normSnakeDirectionVector)
+    # print("normSnakeAppleVec", normSnakeAppleVec)
 
     snakeDirectionVecNormalized  = snakeDirectionVector/normSnakeDirectionVector
     appleDirectionVecNormalized = snakeAppleDirectionVec/normSnakeAppleVec

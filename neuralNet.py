@@ -17,7 +17,6 @@ def getWeights(weights):
     W1 = weights[0:W1_shape[0]*W1_shape[1]]
     W2 = weights[W1_shape[0]*W1_shape[1]: W2_shape[0]*W2_shape[1] + W1_shape[0]*W1_shape[1]]
     W3 = weights[W2_shape[0]*W2_shape[1] + W1_shape[0]*W1_shape[1]:]
-
     return W1.reshape(W1_shape[0],W1_shape[1]), W2.reshape(W2_shape[0],W2_shape[1]), W3.reshape(W3_shape[0],W3_shape[1])   
 
 
